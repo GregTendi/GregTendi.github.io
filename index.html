@@ -33,8 +33,7 @@
   .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
   .lang button{border:0;background:none;color:var(--muted);padding:6px 13px;font:inherit;font-size:13px;cursor:pointer}
   .lang button.on{background:var(--ink);color:var(--bg)}
-  h1{font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 14px;letter-spacing:-.02em;max-width:18ch}
-  .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:0 0 22px}
+  h1{font-size:clamp(30px,5vw,46px);line-height:1.12;margin:0 0 22px;letter-spacing:-.02em;max-width:18ch}
   .links{display:flex;flex-wrap:wrap;gap:10px}
   .pill{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:14px;
     border:1px solid var(--line);background:var(--card);padding:7px 14px;border-radius:999px}
@@ -71,16 +70,14 @@
 <div class="wrap">
   <header>
     <div class="top">
-      <div class="mark">Greg Tendi</div>
+      <div class="mark">Logolymp Edu</div>
       <div class="lang" role="group" aria-label="Language">
         <button data-lang="id" class="on">ID</button>
         <button data-lang="en">EN</button>
       </div>
     </div>
     <h1 data-i18n="title"></h1>
-    <p class="lede" data-i18n="lede"></p>
     <div class="links">
-      <a class="pill" href="https://github.com/GregTendi" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <a class="pill" href="https://instagram.com/logolymp_edu" target="_blank" rel="noopener noreferrer">Instagram @logolymp_edu ↗</a>
       <a class="pill" href="https://wa.me/6285975120427" target="_blank" rel="noopener noreferrer">WhatsApp +62 859-7512-0427 ↗</a>
     </div>
@@ -127,14 +124,12 @@ const PROJECTS = [
 const UI = {
   id: {
     title: "Simulasi Biologi Interaktif untuk OSN Biologi",
-    lede: "Saya Greg, pendiri Logolymp Edu — pelatihan OSN Biologi dan IPA SMP. Di sini saya kumpulkan simulasi yang saya pakai untuk mengajar. Semua bisa langsung dicoba di browser, gratis.",
     all: "Semua", sim: "Simulasi Biologi", tool: "Alat & Software",
     tagSim: "Simulasi", tagTool: "Alat", wip: "Dalam pengembangan",
     demo: "Coba langsung", noDemo: "Tidak ada demo"
   },
   en: {
     title: "Interactive Biology Simulations for the Biology Olympiad (OSN)",
-    lede: "I'm Greg, founder of Logolymp Edu — olympiad training for Biology and junior-high science in Indonesia. Here are the simulations I use in teaching. They all run in your browser, free.",
     all: "All", sim: "Biology Simulations", tool: "Tools & Software",
     tagSim: "Simulation", tagTool: "Tool", wip: "In progress",
     demo: "Try it live", noDemo: "No live demo"
