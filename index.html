@@ -11,14 +11,14 @@
   :root{
     --bg:#f7f6f2; --card:#ffffff; --ink:#1d2321; --muted:#5f6b66; --line:#e3e1da;
     --accent:#1f7a5a; --accent-soft:#e3f1eb; --warm:#b8562e; --warm-soft:#f6e7df;
-    --blue:#2f5f9e; --blue-soft:#e4ecf6;
+    --blue:#2f5f9e; --blue-soft:#e4ecf6; --olive:#6b7a1f; --olive-soft:#eef1dc;
     --radius:14px;
   }
   @media (prefers-color-scheme: dark){
     :root{
       --bg:#141816; --card:#1c211f; --ink:#ecefed; --muted:#9aa6a0; --line:#2c3330;
       --accent:#4fbf93; --accent-soft:#1f3a30; --warm:#e08a63; --warm-soft:#3a281f;
-      --blue:#7aa6e0; --blue-soft:#1f2b3b;
+      --blue:#7aa6e0; --blue-soft:#1f2b3b; --olive:#b9c86a; --olive-soft:#2c321a;
     }
   }
   *{box-sizing:border-box}
@@ -39,12 +39,12 @@
     border:1px solid var(--line);background:var(--card);padding:7px 14px;border-radius:999px}
   .pill:hover{border-color:var(--ink)}
 
-  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 18px}
   .filters button{font:inherit;font-size:14px;cursor:pointer;border:1px solid var(--line);
     background:transparent;color:var(--muted);padding:6px 14px;border-radius:999px}
   .filters button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;padding:10px 0 40px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;padding:0 0 40px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
     overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
   .card:hover{transform:translateY(-2px);box-shadow:0 10px 28px -14px rgba(0,0,0,.25)}
@@ -54,7 +54,9 @@
   .body{padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
   .tags{display:flex;flex-wrap:wrap;gap:6px}
   .tag{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600}
-  .tag.tool{background:var(--blue-soft);color:var(--blue)}
+  .tag.c-blue{background:var(--blue-soft);color:var(--blue)}
+  .tag.c-olive{background:var(--olive-soft);color:var(--olive)}
+  .tag.c-warm{background:var(--warm-soft);color:var(--warm)}
   .tag.wip{background:var(--warm-soft);color:var(--warm)}
   h3{margin:0;font-size:19px;letter-spacing:-.01em}
   .desc{margin:0;color:var(--muted);font-size:15px;flex:1}
@@ -83,6 +85,7 @@
     </div>
   </header>
 
+  <nav class="filters" id="filters" aria-label="Topik"></nav>
   <main class="grid" id="grid"></main>
 
 </div>
@@ -92,12 +95,21 @@
    EDIT DI SINI — tambah proyek baru cukup salin satu blok {...}
    - demo:   link live (GitHub Pages). Kosongkan "" kalau tidak ada.
    - image:  opsional, mis. "img/hardy-weinberg.png" (taruh di repo ini).
-   - category: "sim" (simulasi biologi) atau "tool" (alat/software; label biru)
+   - topics: satu atau lebih topik dari daftar TOPICS di bawah,
+             mis. ["gen", "cell"]. Topik pertama menentukan warna kartu.
    ========================================================= */
 const USER = "GregTendi";
+
+/* Daftar topik. Tambah topik baru di sini (kunci pendek: { id, en, warna }). */
+const TOPICS = {
+  gen:    { id: "Genetika",                       en: "Genetics",                     color: "green"  },
+  cell:   { id: "Biologi Sel dan Molekuler",      en: "Cell & Molecular Biology",     color: "blue"   },
+  plant:  { id: "Anatomi dan Fisiologi Tumbuhan", en: "Plant Anatomy & Physiology",   color: "olive"  },
+  animal: { id: "Anatomi dan Fisiologi Hewan",    en: "Animal Anatomy & Physiology",  color: "warm"   }
+};
 const PROJECTS = [
   {
-    category: "sim",
+    topics: ["cell", "plant", "animal"],
     title: { id: "Simulasi Potensial Air", en: "Water Potential Simulator" },
     desc: {
       id: "Lihat bagaimana sel tumbuhan dan hewan merespons larutan di sekitarnya. Atur konsentrasi zat terlarut, jenis larutan, dan tekanan luar; amati Ψ = Ψs + Ψp berubah secara langsung.",
@@ -108,7 +120,7 @@ const PROJECTS = [
     icon: "cell"
   },
   {
-    category: "sim",
+    topics: ["gen"],
     title: { id: "Simulasi Hardy-Weinberg", en: "Hardy-Weinberg Simulator" },
     desc: {
       id: "Eksplorasi genetika populasi: frekuensi alel dan genotipe dari generasi ke generasi, serta apa yang terjadi saat asumsi kesetimbangan Hardy-Weinberg dilanggar.",
@@ -119,7 +131,7 @@ const PROJECTS = [
     icon: "dna"
   },
   {
-    category: "sim",
+    topics: ["cell"],
     title: { id: "Simulator PCR", en: "PCR Simulator" },
     desc: {
       id: "Jalankan PCR dari awal sampai akhir: rancang primer, hitung volume bahan reaksi, atur program thermocycler, lalu baca hasilnya pada elektroforesis gel agarosa.",
@@ -130,7 +142,7 @@ const PROJECTS = [
     icon: "pcr"
   },
   {
-    category: "sim",
+    topics: ["gen"],
     title: { id: "Penyimpangan Semu Hukum Mendel", en: "Modified Mendelian Ratios" },
     desc: {
       id: "Pahami asal rasio epistasis, atavisme, komplementer, polimeri, dan alel ganda dari cara kerja produk gen dalam jalur biokimia, lengkap dengan papan Punnett dan editor jalur.",
@@ -141,7 +153,7 @@ const PROJECTS = [
     icon: "punnett"
   },
   {
-    category: "sim",
+    topics: ["gen", "cell"],
     title: { id: "Pautan Gen & Pindah Silang", en: "Gene Linkage & Crossing Over" },
     desc: {
       id: "Lihat pindah silang saat meiosis lewat animasi, simulasikan test-cross dan heterozigot × heterozigot, hitung jarak gen dari data anakan, sampai pemetaan tiga titik dengan koinsidensi dan interferensi.",
@@ -157,14 +169,12 @@ const PROJECTS = [
 const UI = {
   id: {
     title: "Simulasi Biologi Interaktif untuk OSN Biologi",
-    all: "Semua", sim: "Simulasi Biologi", tool: "Alat & Software",
-    tagSim: "Simulasi", tagTool: "Alat", wip: "Dalam pengembangan",
+    all: "Semua", wip: "Dalam pengembangan",
     demo: "Coba langsung", noDemo: "Tidak ada demo"
   },
   en: {
     title: "Interactive Biology Simulations for the Biology Olympiad (OSN)",
-    all: "All", sim: "Biology Simulations", tool: "Tools & Software",
-    tagSim: "Simulation", tagTool: "Tool", wip: "In progress",
+    all: "All", wip: "In progress",
     demo: "Try it live", noDemo: "No live demo"
   }
 };
@@ -179,7 +189,9 @@ const ICONS = {
   seq: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 30h50M30 50h55M18 70h48"/><path d="M8 88c8-20 12-20 16 0s8-30 14 0 10-14 14 0 8-24 14 0 10-10 14 0"/></svg>`,
   chart: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 88h82M10 88V10"/><path d="M18 70l18-16 14 10 20-28 16 10"/><path d="M28 40v20M48 30v26M68 22v20"/></svg>`
 };
-const TINTS = { sim:["var(--accent-soft)","var(--accent)"], tool:["var(--blue-soft)","var(--blue)"] };
+const TINTS = { green:["var(--accent-soft)","var(--accent)"], blue:["var(--blue-soft)","var(--blue)"],
+                olive:["var(--olive-soft)","var(--olive)"], warm:["var(--warm-soft)","var(--warm)"] };
+const topicColor = k => (TOPICS[k] && TINTS[TOPICS[k].color]) ? TOPICS[k].color : "green";
 
 /* ---------- render ---------- */
 let lang = (() => { try { const v = localStorage.getItem("lang"); return UI[v] ? v : "id"; } catch(e){ return "id"; } })();
@@ -195,10 +207,17 @@ function render(){
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
   document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
 
+  /* tombol filter: hanya topik yang punya simulasi */
+  const used = Object.keys(TOPICS).filter(k => PROJECTS.some(p => (p.topics||[]).includes(k)));
+  if (filter !== "all" && !used.includes(filter)) filter = "all";
+  document.getElementById("filters").innerHTML = ["all", ...used].map(k =>
+    `<button data-f="${esc(k)}" class="${k===filter?"on":""}">${esc(k==="all" ? t.all : TOPICS[k][lang])}</button>`).join("");
+
   document.getElementById("grid").innerHTML = PROJECTS
-    .filter(p => filter === "all" || p.category === filter)
+    .filter(p => filter === "all" || (p.topics||[]).includes(filter))
     .map(p => {
-      const [bg, fg] = TINTS[p.category] || TINTS.sim;
+      const tps = (p.topics||[]).filter(k => TOPICS[k]);
+      const [bg, fg] = TINTS[topicColor(tps[0])];
       const demo = safeUrl(p.demo), img = safeUrl(p.image);
       const thumb = img
         ? `<img src="${img}" alt="" loading="lazy">`
@@ -208,7 +227,7 @@ function render(){
         <div class="thumb" style="background:${bg}">${thumb}</div>
         <div class="body">
           <div class="tags">
-            <span class="tag ${p.category==="tool"?"tool":""}">${p.category==="sim"?t.tagSim:t.tagTool}</span>
+            ${tps.map(k => `<span class="tag c-${topicColor(k)}">${esc(TOPICS[k][lang])}</span>`).join("")}
             ${p.wip ? `<span class="tag wip">${t.wip}</span>` : ""}
           </div>
           <h3>${esc(p.title[lang])}</h3>
@@ -225,6 +244,8 @@ function render(){
 document.addEventListener("click", e => {
   const l = e.target.closest("[data-lang]");
   if (l && UI[l.dataset.lang]){ lang = l.dataset.lang; try{ localStorage.setItem("lang", lang); }catch(_){} render(); }
+  const f = e.target.closest("[data-f]");
+  if (f){ filter = f.dataset.f; render(); }
 });
 render();
 </script>
