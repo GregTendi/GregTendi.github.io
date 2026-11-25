@@ -11,14 +11,14 @@
   :root{
     --bg:#f7f6f2; --card:#ffffff; --ink:#1d2321; --muted:#5f6b66; --line:#e3e1da;
     --accent:#1f7a5a; --accent-soft:#e3f1eb; --warm:#b8562e; --warm-soft:#f6e7df;
-    --blue:#2f5f9e; --blue-soft:#e4ecf6; --olive:#6b7a1f; --olive-soft:#eef1dc;
+    --blue:#2f5f9e; --blue-soft:#e4ecf6; --olive:#6b7a1f; --olive-soft:#eef1dc; --teal:#137a85; --teal-soft:#dff1f3;
     --radius:14px;
   }
   @media (prefers-color-scheme: dark){
     :root{
       --bg:#141816; --card:#1c211f; --ink:#ecefed; --muted:#9aa6a0; --line:#2c3330;
       --accent:#4fbf93; --accent-soft:#1f3a30; --warm:#e08a63; --warm-soft:#3a281f;
-      --blue:#7aa6e0; --blue-soft:#1f2b3b; --olive:#b9c86a; --olive-soft:#2c321a;
+      --blue:#7aa6e0; --blue-soft:#1f2b3b; --olive:#b9c86a; --olive-soft:#2c321a; --teal:#6cc8d2; --teal-soft:#183538;
     }
   }
   *{box-sizing:border-box}
@@ -57,6 +57,7 @@
   .tag.c-blue{background:var(--blue-soft);color:var(--blue)}
   .tag.c-olive{background:var(--olive-soft);color:var(--olive)}
   .tag.c-warm{background:var(--warm-soft);color:var(--warm)}
+  .tag.c-teal{background:var(--teal-soft);color:var(--teal)}
   .tag.wip{background:var(--warm-soft);color:var(--warm)}
   h3{margin:0;font-size:19px;letter-spacing:-.01em}
   .desc{margin:0;color:var(--muted);font-size:15px;flex:1}
@@ -107,7 +108,8 @@ const TOPICS = {
   gen:    { id: "Genetika",                       en: "Genetics",                     color: "green"  },
   cell:   { id: "Biologi Sel dan Molekuler",      en: "Cell & Molecular Biology",     color: "blue"   },
   plant:  { id: "Anatomi dan Fisiologi Tumbuhan", en: "Plant Anatomy & Physiology",   color: "olive"  },
-  animal: { id: "Anatomi dan Fisiologi Hewan",    en: "Animal Anatomy & Physiology",  color: "warm"   }
+  animal: { id: "Anatomi dan Fisiologi Hewan",    en: "Animal Anatomy & Physiology",  color: "warm"   },
+  eco:    { id: "Ekologi",                        en: "Ecology",                      color: "teal"   }
 };
 const PROJECTS = [
   {
@@ -164,6 +166,17 @@ const PROJECTS = [
     tech: "HTML · JavaScript",
     demo: `https://${USER.toLowerCase()}.github.io/linkage/`,
     icon: "linkage"
+  },
+  {
+    topics: ["eco"],
+    title: { id: "Pertumbuhan Populasi", en: "Population Growth" },
+    desc: {
+      id: "Bandingkan model pertumbuhan eksponensial dan logistik, lalu lihat bagaimana populasi mangsa dan predator saling mengatur dalam model Lotka–Volterra.",
+      en: "Compare exponential and logistic growth models, then see how prey and predator populations regulate each other in the Lotka–Volterra model."
+    },
+    tech: "HTML · JavaScript",
+    demo: `https://${USER.toLowerCase()}.github.io/population-growth/`,
+    icon: "growth"
   }
 ];
 
@@ -183,6 +196,7 @@ const UI = {
 
 /* ---------- ikon placeholder (dipakai kalau tidak ada image) ---------- */
 const ICONS = {
+  growth: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 90h82M10 90V8"/><path d="M14 84c22 0 26-58 50-62 10-2 20-2 26-2"/><path d="M14 84c14 0 24-10 30-40" stroke-dasharray="4 4"/><path d="M10 20h82" stroke-dasharray="2 5"/></svg>`,
   linkage: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 10c0 30 56 50 56 80"/><path d="M78 10c0 30-56 50-56 80" stroke-dasharray="5 4"/><circle cx="26" cy="22" r="4" fill="currentColor"/><circle cx="74" cy="22" r="4"/><circle cx="26" cy="78" r="4"/><circle cx="74" cy="78" r="4" fill="currentColor"/></svg>`,
   pcr: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M30 10h20v8l-4 6v46a6 6 0 0 1-12 0V24l-4-6z"/><path d="M34 46h12"/><rect x="60" y="14" width="30" height="74" rx="4"/><path d="M66 30h18M66 44h18M68 58h14M66 72h18" stroke-width="4"/></svg>`,
   punnett: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><rect x="20" y="20" width="70" height="70" rx="6"/><path d="M43 20v70M67 20v70M20 43h70M20 67h70"/><path d="M8 32h6M8 55h6M8 78h6M32 8v6M55 8v6M78 8v6"/><circle cx="31" cy="31" r="5"/><circle cx="55" cy="55" r="5"/><circle cx="79" cy="79" r="5"/></svg>`,
@@ -192,7 +206,8 @@ const ICONS = {
   chart: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3"><path d="M10 88h82M10 88V10"/><path d="M18 70l18-16 14 10 20-28 16 10"/><path d="M28 40v20M48 30v26M68 22v20"/></svg>`
 };
 const TINTS = { green:["var(--accent-soft)","var(--accent)"], blue:["var(--blue-soft)","var(--blue)"],
-                olive:["var(--olive-soft)","var(--olive)"], warm:["var(--warm-soft)","var(--warm)"] };
+                olive:["var(--olive-soft)","var(--olive)"], warm:["var(--warm-soft)","var(--warm)"],
+                teal:["var(--teal-soft)","var(--teal)"] };
 const topicColor = k => (TOPICS[k] && TINTS[TOPICS[k].color]) ? TOPICS[k].color : "green";
 
 /* ---------- render ---------- */
